@@ -3,7 +3,7 @@
 
 Dragon Slayer is an immersive educational game that combines learning with adventure. Players embark on an epic quest to defeat a formidable dragon by demonstrating their knowledge across various topics. Each correct answer brings them closer to victory, while wrong answers could spell doom for our hero!
  
-[Explore the Lore Behind Game](/GameLore.md)
+[Explore the Lore Behind the Game](/GameLore.md)
 ## Features
 
 - **Interactive Gameplay**: Answer multiple-choice questions to attack the dragon.
@@ -70,6 +70,7 @@ Or Setup the Game Locally By Following Instructions
 
 5. Run Backend
     ```
+    cd Backend
     flask run
     ```
 
