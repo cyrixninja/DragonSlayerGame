@@ -1,8 +1,9 @@
 # Dragon Slayer
 ![1](/Screenshots/1.png)
 
-**Dragon Slayer** is an engaging and interactive game where players test their knowledge and bravery in a quest to defeat a mighty dragon. Answer questions correctly to strike the dragon and emerge as the legendary hero! 
-
+Dragon Slayer is an immersive educational game that combines learning with adventure. Players embark on an epic quest to defeat a formidable dragon by demonstrating their knowledge across various topics. Each correct answer brings them closer to victory, while wrong answers could spell doom for our hero!
+ 
+[Explore the Lore Behind Game](/GameLore.md)
 ## Features
 
 - **Interactive Gameplay**: Answer multiple-choice questions to attack the dragon.
