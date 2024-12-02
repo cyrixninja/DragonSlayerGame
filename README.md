@@ -28,6 +28,8 @@ AWS Bedrock is utilized to generate dynamic quiz questions based on the topic pr
 Amazon EC2 (Elastic Compute Cloud) is used to host the game application and its backend services. EC2 provides scalable computing capacity, allowing us to handle varying levels of traffic and ensure a smooth gaming experience for all users. By using EC2, we can easily deploy, manage, and scale our application as needed.
 ![aws2](/Screenshots/aws2.png)
 
+### 4. Amazon Q - For Writing the Code
+mazon Q is leveraged to assist in writing and generating code for the game. By utilizing Amazon Q's advanced AI capabilities, we can streamline the development process, ensuring that the code is efficient, well-structured, and adheres to best practices. This allows the development team to focus more on creative aspects and game design, while Amazon Q handles repetitive and complex coding tasks.
 
 ## Getting Started
 To  play the Game Navigate to Here - 
