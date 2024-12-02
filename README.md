@@ -30,6 +30,7 @@ Amazon EC2 (Elastic Compute Cloud) is used to host the game application and its 
 
 ### 4. Amazon Q - For Writing the Code
 Amazon Q is leveraged to assist in writing and generating code for the game. By utilizing Amazon Q's advanced AI capabilities, we can streamline the development process, ensuring that the code is efficient, well-structured, and adheres to best practices. This allows the development team to focus more on creative aspects and game design, while Amazon Q handles repetitive and complex coding tasks.
+![aws3](/Screenshots/aws3.png)
 
 ## Getting Started
 To  play the Game Navigate to Here - 
