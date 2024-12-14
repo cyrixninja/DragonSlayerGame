@@ -1,18 +1,35 @@
-import boto3
+# Importing Libraries
+import os
 import json
-import time
+import boto3
+from dotenv import load_dotenv
 from botocore.exceptions import ClientError
 
-# Initialize the Bedrock client
-bedrock = boto3.client(
-    service_name='bedrock-runtime',   
-    region_name='us-east-1' # Region where the Bedrock model is deployed
+# Load the environment variables from the .env file.
+load_dotenv()
+AWS_REGION = os.getenv("AWS_REGION")
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+
+# Verify that the credentials are loaded
+if not AWS_ACCESS_KEY_ID or not AWS_SECRET_ACCESS_KEY or not AWS_REGION:
+    raise Exception("AWS credentials are not properly set.")
+
+# Create a Bedrock Runtime client in the AWS Region of your choice.
+client = boto3.client(
+    'bedrock-runtime',
+    region_name=AWS_REGION,
+    aws_access_key_id=AWS_ACCESS_KEY_ID,
+    aws_secret_access_key=AWS_SECRET_ACCESS_KEY
 )
 
-def generate_quiz_questions(input_topic):
+# Set the model ID
+model_id = "amazon.nova-pro-v1:0"
+
+def generate_quiz_questions(input_topic, max_tokens=4096, temperature=0.5, top_p=0.9):
     prompt = f""" Generate multiple-choice quiz questions in the specified JSON format on following topic - {input_topic}:
 
-                Create a JSON array containing 10 multiple-choice quiz questions on topics as given by user. Follow the **exact JSON structure** below for each question:
+                Create a JSON array containing 20 multiple-choice quiz questions on topics as given by user. Follow the **exact JSON structure** below for each question:
 
                 Each question should:
                 1. Be clearly worded, avoiding ambiguity.
@@ -38,43 +55,34 @@ def generate_quiz_questions(input_topic):
                 The JSON should be an array of objects, each object representing a single question in the specified format. 
                 Don't include any newline in the response . """
 
-    body = json.dumps({
-        "prompt": prompt,
-        "temperature": 1
-    })
+    conversation = [
+        {
+            "role": "user",
+            "content": [{"text": prompt}],
+        }
+    ]
+    try:
+        # Send the message to the model using the provided inference configuration.
+        response = client.converse(
+            modelId=model_id,
+            messages=conversation,
+            inferenceConfig={
+                "maxTokens": max_tokens,
+                "temperature": temperature,
+                "topP": top_p,
+            },
+        )
 
-    modelId = 'ai21.j2-mid-v1' # Model ID for the Bedrock model
-    accept = 'application/json' # Accept header for the response
-    contentType = 'application/json'    # Content-Type header for the request
+        # Extract and return the response text.
+        response_text = response["output"]["message"]["content"][0]["text"]
+        return response_text
 
-    max_retries = 5    # maximum number of retries
-    retry_delay = 1  # initial delay in seconds
+    except (ClientError, Exception) as e:
+        print(f"ERROR: Can't invoke '{model_id}'. Reason: {e}")
+        return None
 
-    for attempt in range(max_retries):
-        try:
-            response = bedrock.invoke_model(body=body, modelId=modelId, accept=accept, contentType=contentType)
-            response_body = json.loads(response['body'])
-            questions = response_body['generations'][0]['text']
-
-            # Strip any additional text before the JSON array
-            start_index = questions.find('[')
-            end_index = questions.rfind(']') + 1
-            questions = questions[start_index:end_index].strip()
-
-            # Check if questions string is not empty before parsing
-            if questions.strip():
-                try:
-                    questions_json = json.loads(questions)
-                    formatted_questions_json = json.dumps(questions_json, indent=2)
-                    return formatted_questions_json
-                except json.JSONDecodeError as e:
-                    return f"Error decoding JSON: {e}"
-            else:
-                return "No questions generated."
-        except ClientError as e:
-            if e.response['Error']['Code'] == 'ThrottlingException':
-                print(f"ThrottlingException: Retrying in {retry_delay} seconds...")
-                time.sleep(retry_delay)
-                retry_delay *= 2 
-            else:
-                return f"An error occurred: {e}"
+# Example usage:
+#prompt = "Hello, how are you today?"
+#response = generate_response(prompt, max_tokens=512, temperature=0.5, top_p=0.9)
+#if response:
+#    print(response)
