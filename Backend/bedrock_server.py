@@ -24,7 +24,7 @@ client = boto3.client(
 )
 
 # Set the model ID
-model_id = "amazon.nova-pro-v1:0"
+model_id = "amazon.nova-lite-v1:0"
 
 def generate_quiz_questions(input_topic, max_tokens=4096, temperature=0.5, top_p=0.9):
     prompt = f""" Generate multiple-choice quiz questions in the specified JSON format on following topic - {input_topic}:

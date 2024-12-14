@@ -57,7 +57,7 @@ useEffect(() => {
 
 const startGame = async () => {
   try {
-    const response = await fetch(`http://127.0.0.1:5000/generate-quiz?topic=${topic}`);
+    const response = await fetch(`https://<YOUR AWS EC2 Instance URL>/generate-quiz?topic=${topic}`);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
